@@ -1,0 +1,14 @@
+<!doctype html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+  <title>Pharmacy Drug Request</title>
+</head>
+<body>
+  <h1>Pharmacy Information</h1>
+  <form action="#" th:action="@{/pharmacyrequest}" method="post">
+  Pharmacy ID: <input type="text" name="pharmacyID" /><br/>
+  Date: <input type="date" name="date" /><br/>
+  <input type="submit" value="OK" name="ok"/>
+  <input type="submit" value="Cancel" name="cancel"/>
+  </form>
+</body></html>

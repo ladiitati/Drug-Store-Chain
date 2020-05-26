@@ -1,0 +1,17 @@
+<!doctype html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+  <title>Prescription Form</title>
+</head>
+<body>
+  <h1>Enter a prescription </h1>
+  <form action="#" th:action="@{/prescriptionform}" th:object="${prescription}" method="post">
+  Doctor: <input type="text" th:field="*{doctorID}" /><br/>
+  Patient: <input type="text" th:field="*{patientID}" /><br/>
+  Drug: <input type="text" th:field="*{drugName}" /><br/>
+  Quantity: <input type="text" th:field="*{quantity}" /><br/>
+  Refills: <input type="text" th:field="*{refills}" /><br/>
+  <input type="submit" value="OK" name="ok"/>
+  <input type="submit" value="Cancel" name="cancel"/>
+  </form>
+</body></html>

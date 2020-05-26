@@ -98,10 +98,10 @@ CREATE TABLE IF NOT EXISTS `drugstore`.`Pharmacy_Drug` (
 )
 ENGINE = InnoDB;
 
-DROP TABLE IF EXISTS `drugstore`.`Perscription`;
-CREATE TABLE IF NOT EXISTS `drugstore`.`Perscription` 
+DROP TABLE IF EXISTS `drugstore`.`Prescription`;
+CREATE TABLE IF NOT EXISTS `drugstore`.`Prescription` 
 (
-  `perscription_id` INT NOT NULL,
+  `prescription_id` INT NOT NULL,
   `patient_ssn` INT NOT NULL,
   `drug_id` INT NOT NULL,
   `doctor_ssn` INT NOT NULL,
@@ -111,27 +111,27 @@ CREATE TABLE IF NOT EXISTS `drugstore`.`Perscription`
   `refills_filled` INT NULL,
   `dosage` INT NOT NULL,
   `pharmacy_id` INT NOT NULL,
-  INDEX `perscription_fk_patient_idx` (`patient_ssn` ASC) VISIBLE,
-  INDEX `perscription_fk_doctor_idx` (`doctor_ssn` ASC) VISIBLE,
-  INDEX `perscription_fk_drug_idx` (`drug_id` ASC) VISIBLE,
-  PRIMARY KEY (`perscription_id`),
-  INDEX `fk_Perscription_Pharmacy1_idx` (`pharmacy_id` ASC) VISIBLE,
-  CONSTRAINT `perscription_fk_patient`
+  INDEX `prescription_fk_patient_idx` (`patient_ssn` ASC) VISIBLE,
+  INDEX `prescription_fk_doctor_idx` (`doctor_ssn` ASC) VISIBLE,
+  INDEX `prescription_fk_drug_idx` (`drug_id` ASC) VISIBLE,
+  PRIMARY KEY (`prescription_id`),
+  INDEX `fk_prescription_Pharmacy1_idx` (`pharmacy_id` ASC) VISIBLE,
+  CONSTRAINT `prescription_fk_patient`
     FOREIGN KEY (`patient_ssn`)
     REFERENCES `drugstore`.`Patient` (`patient_ssn`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `perscription_fk_doctor`
+  CONSTRAINT `prescription_fk_doctor`
     FOREIGN KEY (`doctor_ssn`)
     REFERENCES `drugstore`.`Doctor` (`doctor_ssn`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `perscription_fk_drug`
+  CONSTRAINT `prescription_fk_drug`
     FOREIGN KEY (`drug_id`)
     REFERENCES `drugstore`.`Drug` (`drug_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Perscription_Pharmacy1`
+  CONSTRAINT `fk_Prescription_Pharmacy1`
     FOREIGN KEY (`pharmacy_id`)
     REFERENCES `drugstore`.`Pharmacy` (`pharmacy_id`)
     ON DELETE NO ACTION

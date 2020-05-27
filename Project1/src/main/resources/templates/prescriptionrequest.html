@@ -8,7 +8,6 @@
   <form action="#" th:action="@{/prescriptionrequest}" th:object="${prescription}" method="post">
   Patient SSN: <input type="text" th:field="*{patientID}" /><br/>
   Prescription ID: <input type="text" th:field="*{prescriptionID}" /><br/>
-  Stuff: <input type="text" name="stuff"/><br/>
   <input type="submit" value="Submit" />
   </form>
 </body></html>

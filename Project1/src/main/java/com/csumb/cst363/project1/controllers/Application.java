@@ -206,16 +206,52 @@ public class Application
    }
    
    @PostMapping("/prescriptionrequest")
-   public String processForm(@Validated Prescription prescription, 
-         BindingResult result, Model model, @RequestParam("stuff") String stuff) {
+   public String processForm(@RequestParam("patientID") String patientID, 
+         @RequestParam("prescriptionID") String prescriptionID, 
+         Model model) {
+      
+      int price = 0;
+      
+      try {
+         Connection conn = jdbcTemplate.getDataSource().getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(
+               "select pd.price " +
+               "from Pharmacy_drug pd " +
+               "where drug_id = " +
+               "(select drug_id " +
+               "from prescription " +
+               "where patient_ssn = ? " +
+               "and perscription_id = ?) " +
+               "and pharmacy_id =  " +
+               "(select pharmacy_id " +
+               "from patient  " +
+               "where patient_ssn = ?) ");
+         
+         pstmt.setInt(1, 0);
+         pstmt.setInt(2, 51);
+         pstmt.setInt(3, 0);
+         ResultSet rs = pstmt.executeQuery();
+      
+         if (rs.next())
+         {
+            price = rs.getInt(1);
+            model.addAttribute("price", price);
+            model.addAttribute("prescriptionID", prescriptionID);
+            model.addAttribute("patientID", patientID);
+         }
+      
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
+      
       model.addAttribute("prescription", prescription);
-      model.addAttribute("stuff", stuff);
       return "prescriptionfill";
    }
    
    @RequestMapping(value = "/prescriptionfill", params = "ok", method = RequestMethod.POST)
-   public String prescriptionRequestOK(@Validated Prescription prescription, 
-         BindingResult result, Model model) {
+   public String prescriptionRequestOK(@RequestParam("patientID") String patientID,
+         @RequestParam("prescriptionID") String prescriptionID, Model model) {
+      
       
       return "prescriptionrequest";
    }
@@ -267,7 +303,7 @@ public class Application
          }
 
          model.addAttribute("report", report);
-         
+        
          conn.close();
          
       } catch (SQLException e) {

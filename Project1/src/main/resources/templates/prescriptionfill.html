@@ -11,15 +11,15 @@
       <tr>
          <th>Patient</th>
          <th>Prescription ID</th>
-         <th>Stuff</th>
+         <th>Price</th>
       </tr>
       <tr>
-         <td th:inline="text">[[${prescription.patientID}]]</td>
-         <td th:inline="text">[[${prescription.prescriptionID}]]</td>
-         <td th:inline="text">[[${stuff}]]</td>
+         <td th:inline="text">[[${patientID}]]</td>
+         <td th:inline="text">[[${prescriptionID}]]</td>
+         <td th:inline="text">[[${price}]]</td>
       </tr>
    </table>
-   <form action="#" th:action="@{/prescriptionfill}" th:object="${prescription}" method="post">
+   <form action="#" th:action="@{/prescriptionfill}" th:object="${price}" method="post">
    <input type="submit" value="OK" name="ok"/>
    <input type="submit" value="Cancel" name="cancel"/>
 </body></html>

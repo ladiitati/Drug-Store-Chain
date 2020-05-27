@@ -1,94 +1,90 @@
 package com.csumb.cst363.project1;
 
-public class Prescription
-{
-   int doctorID;
-   int patientID;
-   String drugName = "w";
-   int quantity;
-   int refills;
-   //int prescriptionID;
-   
-   public int getPrescriptionID()
-   {
-      //return prescriptionID;
-      return 0;
-   }
+import java.sql.Date;
 
-   public void setPrescriptionID(int prescriptionID)
-   {
-     // this.prescriptionID = prescriptionID;
-   }
+public class Prescription {
+    int doctorID;
+    int patientID;
+    String drugName = "w";
+    int quantity;
+    int refills;
+    Date date;
+    //int prescriptionID;
 
-   public Prescription() {
-      
-   }
+    public int getPrescriptionID() {
+        //return prescriptionID;
+        return 0;
+    }
 
-   public Prescription(int doctorID, int patientID, String drugName, 
-         int quantity, int refills) {
-      this.doctorID = doctorID;
-      this.patientID = patientID;
-      this.drugName = drugName;
-      this.quantity = quantity;
-      this.refills = refills;;
-   }
-   public Prescription(int doctorID, int patientID, String drugName, 
-         int quantity, int refills, int prescriptionID) {
-      this.doctorID = doctorID;
-      this.patientID = patientID;
-      this.drugName = drugName;
-      this.quantity = quantity;
-      this.refills = refills;
-      //this.prescriptionID = prescriptionID;
-   }
-   
-   public int getDoctorID()
-   {
-      return doctorID;
-   }
+    public void setPrescriptionID(int prescriptionID) {
+        // this.prescriptionID = prescriptionID;
+    }
 
-   public void setDoctorID(int doctorID)
-   {
-      this.doctorID = doctorID;
-   }
+    public Prescription() {
 
-   public int getPatientID()
-   {
-      return patientID;
-   }
+    }
 
-   public void setPatientID(int patientID)
-   {
-      this.patientID = patientID;
-   }
+    public Prescription(int doctorID, int patientID, String drugName,
+                        int quantity, int refills, Date date) {
+        this.doctorID = doctorID;
+        this.patientID = patientID;
+        this.drugName = drugName;
+        this.quantity = quantity;
+        this.refills = refills;
+        this.date = date;
+    }
 
-   public String getDrugName()
-   {
-      return drugName;
-   }
+    public Prescription(int doctorID, int patientID, String drugName,
+                        int quantity, int refills, int prescriptionID) {
+        this.doctorID = doctorID;
+        this.patientID = patientID;
+        this.drugName = drugName;
+        this.quantity = quantity;
+        this.refills = refills;
+        //this.prescriptionID = prescriptionID;
+    }
 
-   public void setDrugName(String drugName)
-   {
-      this.drugName = drugName;
-   }
+    public int getDoctorID() {
+        return doctorID;
+    }
 
-   public int getQuantity()
-   {
-      return quantity;
-   }
+    public void setDoctorID(int doctorSSN) {
+        this.doctorID = doctorID;
+    }
 
-   public void setQuantity(int quantity)
-   {
-      this.quantity = quantity;
-   }
+    public int getPatientID() {
+        return patientID;
+    }
 
-   public int getRefills()
-   {
-      return refills;
-   }
+    public void setPatientID(int patientID) {
+        this.patientID = patientID;
+    }
 
-   public void setRefills(int refills)
-   {
-      this.refills = refills;
-   }
+    public String getDrugName() {
+        return drugName;
+    }
+
+    public void setDrugName(String drugName) {
+        this.drugName = drugName;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getRefills() {
+        return refills;
+    }
+
+    public void setRefills(int refills) {
+        this.refills = refills;
+    }
+
+    public Date getDate() {
+        return date;
+    }
 }

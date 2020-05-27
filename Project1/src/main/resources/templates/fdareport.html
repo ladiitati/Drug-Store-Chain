@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>FDA Report</title>
+</head>
+<body>
+<form>
+    <label>Date (mm/yyy)</label>
+    <input type="text" id="date"><br><br>
+    <button id="filter-date">Submit</button>
+</form>
+<h3>FDA Report - Quantity Prescribed by Doctor in Last Six Months</h3>
+<table id="report-table" border="3">
+    <tr id="headers">
+        <th>Doctor ID</th>
+        <th>Doctor Name</th>
+    </tr>
+</table>
+</body>
+<script>
+
+    const fetchData = async () => {
+        const response = await fetch('http://localhost:8080/fetchReport');
+        const fdaReport = await response.json();
+        console.log(fdaReport);
+        return fdaReport;
+    }
+
+    const renderData = (fdaReport) => {
+        const {reportRows} = fdaReport;
+        const table = document.querySelector('#report-table');
+
+        for (let row of reportRows) {
+            const {doctorName, doctorId, drugSummaries} = row;
+
+            const trRow = document.createElement('tr');
+            trRow.classList.add('entry');
+            const tdDocId = document.createElement('td');
+            const tdDocName = document.createElement('td');
+            tdDocName.innerHTML = doctorName;
+            tdDocId.innerHTML = doctorId;
+            trRow.appendChild(tdDocId);
+            trRow.appendChild(tdDocName);
+
+            for (let drug of drugSummaries) {
+                const {drugGenericName, quantityPrescribed, prescriptions} = drug;
+                let total = 0;
+
+                for (let prescription of prescriptions) {
+                    total += prescription.quantity;
+                }
+
+                const tdDrug = document.createElement('td');
+                tdDrug.innerHTML = `Drug: ${drugGenericName} Quantity: ${quantityPrescribed}`;
+                trRow.appendChild(tdDrug);
+            }
+            table.appendChild(trRow);
+        }
+    }
+
+    const clearRows = (rows) => {
+        for (let row of rows) {
+            row.remove();
+        }
+    }
+
+    const filterResponseData = (date, reportData) => {
+        const { reportRows } = reportData;
+
+        for (let row of reportRows) {
+            const {drugSummaries} = row;
+
+            for (let drugSummary of drugSummaries) {
+                const {prescriptions} = drugSummary;
+
+                for (let prescription of prescriptions) {
+                    const {date: prescribedDate} = prescription;
+
+                    if (Math.round(date.getTime() - new Date(prescribedDate).getTime().toFixed(0)) > 182) {
+                        drugSummary.quantityPrescribed -= prescription.quantity;
+                    }
+                }
+            }
+        }
+        return reportData;
+    }
+
+    const filterByDate = async (date) => {
+        const rows = document.querySelectorAll('#report-table .entry');
+        clearRows(rows);
+        let reportData = await fetchData();
+        reportdata = filterResponseData(date, reportData);
+        renderData(reportData);
+    };
+
+    const bindListeners = () => {
+        const submit = document.querySelector('#filter-date');
+        submit.addEventListener('click', (event) => {
+            event.preventDefault();
+            const dateInput = document.querySelector('#date');
+            const dateValue = dateInput.value;
+            try {
+                if (isNaN(parseInt(dateValue.split('/')[0]) || isNaN(parseInt(dateValue.split('/')[1])))) {
+                    alert('enter a valid date in mm/yyyy format');
+                    return;
+                }
+                const enteredDate = new Date(dateValue.split('/').join('/01/'));
+                filterByDate(enteredDate);
+            } catch (error) {
+                alert('enter a valid date in mm/yyyy format');
+            }
+        });
+    }
+
+    const main = async () => {
+        let fdaReport = await fetchData();
+        renderData(fdaReport);
+        bindListeners()
+    }
+    main()
+</script>
+</html>

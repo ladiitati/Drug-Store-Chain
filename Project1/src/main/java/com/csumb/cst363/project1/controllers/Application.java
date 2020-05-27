@@ -1,14 +1,12 @@
 package com.csumb.cst363.project1.controllers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -59,7 +57,7 @@ public class Application
       
       try {
          Connection conn = jdbcTemplate.getDataSource().getConnection();
-      
+         
          List<String> drugs = jdbcTemplate.query(
             "select distinct trade_name from Drug",
             new Object[] { } ,
@@ -71,6 +69,15 @@ public class Application
                new Object[] { } ,
                (rs, rowNum) -> new String(rs.getString("name")));
             model.addAttribute("doctors", doctors);
+            
+         List<String> pharmacies = jdbcTemplate.query(
+               "select distinct name from Pharmacy",
+               new Object[] { } ,
+               (rs, rowNum) -> new String(rs.getString("name")));
+            model.addAttribute("pharmacies", pharmacies);
+            
+            conn.close();
+            
       } catch (SQLException e) {
          e.printStackTrace();
       }
@@ -96,6 +103,8 @@ public class Application
             new Object[] { } ,
             (rs, rowNum) -> new String(rs.getString("name")));
          model.addAttribute("pharmacies", pharmacies);
+         
+         conn.close();
 
       } catch (SQLException e) {
          e.printStackTrace();
@@ -111,32 +120,74 @@ public class Application
    }
    
    @RequestMapping(value = "/prescriptionform", params = "cancel", method = RequestMethod.POST)
-   public String prescriptionDisplayCancel(@Validated Prescription prescription, 
-         BindingResult result, Model model) {
-      model.addAttribute("prescription", new Prescription());
-      return "prescription";
+   public String prescriptionDisplayCancel(Model model) {
+      return "project1";
    }
    
    @RequestMapping(value = "/prescriptionform", params = "ok", method = RequestMethod.POST)
    public String prescriptionDisplayOK(@Validated Prescription prescription, 
-         BindingResult result, Model model) {
+         @RequestParam("pharmacy") String pharmacy, @RequestParam("drug") String drug,
+         @RequestParam("doctor") String doctor, BindingResult result, Model model) {
       
       int prescription_ID = 0;
+      int pharmacy_id = 0;
+      int drug_id = 0;
+      int doctor_id = 0;
       
       try {
+         
+         //get drugID from name
          Connection conn = jdbcTemplate.getDataSource().getConnection();
+         
          PreparedStatement pstmt = conn.prepareStatement(
+               "select pharmacy_id from Pharmacy where name = ?");
+         pstmt.setString(1, pharmacy);
+         ResultSet rs = pstmt.executeQuery();
+         
+         if(rs.next())
+         {
+            pharmacy_id = rs.getInt(1);
+           // model.addAttribute("pharmacy_id", pharmacy_id);
+         }
+         
+         //get Pharmacy ID from name
+         pstmt = conn.prepareStatement(
+               "select drug_id from Drug where trade_name = ?");
+         pstmt.setString(1, drug);
+         rs = pstmt.executeQuery();
+         
+         if(rs.next())
+         {
+            drug_id = rs.getInt(1);
+           // model.addAttribute("pharmacy_id", pharmacy_id);
+         }
+         
+         //get DoctorSSN using doctor name
+         pstmt = conn.prepareStatement(
+               "select doctor_SSN from Doctor where name = ?");
+         pstmt.setString(1, doctor);
+         rs = pstmt.executeQuery();
+         
+         if(rs.next())
+         {
+            doctor_id = rs.getInt(1);
+            //model.addAttribute("pharmacy_id", pharmacy_id);
+         }
+         
+         //Connection conn = jdbcTemplate.getDataSource().getConnection();
+         //PreparedStatement 
+         pstmt = conn.prepareStatement(
                "insert into prescription (doctor_ssn, patient_ssn, drug_ID, quantity, refills_auth, "
                + "date, dosage, pharmacy_id) "
                + "values (?,?,?,?,?,?,?,?)");
-         pstmt.setString(1, Integer.toString(prescription.getDoctorID()));
+         pstmt.setString(1, Integer.toString(doctor_id));
          pstmt.setString(2, Integer.toString(prescription.getPatientID()));
-         pstmt.setString(3, Integer.toString(prescription.getDrugID()));
+         pstmt.setString(3, Integer.toString(drug_id));
          pstmt.setString(4, Integer.toString(prescription.getQuantity()));
          pstmt.setString(5, Integer.toString(prescription.getRefills()));
-         pstmt.setString(6, "2020-01-01"); //use todays date
-         pstmt.setString(7, "50");
-         pstmt.setString(8, "1");
+         pstmt.setString(6, prescription.getDate()); //use todays date
+         pstmt.setString(7, Integer.toString(prescription.getDosage()));
+         pstmt.setString(8, Integer.toString(pharmacy_id));
          int rc = pstmt.executeUpdate();
          
          ResultSet index = pstmt.executeQuery("SELECT LAST_INSERT_ID()");
@@ -170,9 +221,8 @@ public class Application
    }
    
    @RequestMapping(value = "/prescriptionfill", params = "cancel", method = RequestMethod.POST)
-   public String prescriptionRequestCancel(@Validated Prescription prescription, 
-         BindingResult result, Model model) {     
-      return "prescriptionrequest";
+   public String prescriptionRequestCancel(Model model) {     
+      return "project1";
    }
    
    @RequestMapping(value = "/pharmacyrequest", params = "ok", method = RequestMethod.POST)

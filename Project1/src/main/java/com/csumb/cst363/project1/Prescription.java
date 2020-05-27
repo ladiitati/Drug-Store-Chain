@@ -4,8 +4,43 @@ public class Prescription
 {
    int doctorID;
    int patientID;
-   String drugName = "w";
    int drugID;
+   int dosage;
+   int pharmacyID;
+   int refills;
+   String date;
+   
+   public String getDate()
+   {
+      return date;
+   }
+
+   public void setDate(String date)
+   {
+      this.date = date;
+   }
+
+   public int getDosage()
+   {
+      return dosage;
+   }
+
+   public void setDosage(int dosage)
+   {
+      this.dosage = dosage;
+   }
+
+   public int getPharmacyID()
+   {
+      return pharmacyID;
+   }
+
+   public void setPharmacyID(int pharmacyID)
+   {
+      this.pharmacyID = pharmacyID;
+   }
+
+   int quantity;
    
    public int getDrugID()
    {
@@ -17,9 +52,6 @@ public class Prescription
       this.drugID = drugID;
    }
 
-   int quantity;
-   int refills;
-   //int prescriptionID;
    
    public int getPrescriptionID()
    {
@@ -36,19 +68,17 @@ public class Prescription
       
    }
 
-   public Prescription(int doctorID, int patientID, String drugName, 
+   public Prescription(int doctorID, int patientID, 
          int quantity, int refills) {
       this.doctorID = doctorID;
       this.patientID = patientID;
-      this.drugName = drugName;
       this.quantity = quantity;
       this.refills = refills;;
    }
-   public Prescription(int doctorID, int patientID, String drugName, 
+   public Prescription(int doctorID, int patientID, 
          int quantity, int refills, int prescriptionID) {
       this.doctorID = doctorID;
       this.patientID = patientID;
-      this.drugName = drugName;
       this.quantity = quantity;
       this.refills = refills;
       //this.prescriptionID = prescriptionID;
@@ -72,16 +102,6 @@ public class Prescription
    public void setPatientID(int patientID)
    {
       this.patientID = patientID;
-   }
-
-   public String getDrugName()
-   {
-      return drugName;
-   }
-
-   public void setDrugName(String drugName)
-   {
-      this.drugName = drugName;
    }
 
    public int getQuantity()

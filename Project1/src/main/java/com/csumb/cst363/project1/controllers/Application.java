@@ -181,6 +181,34 @@ public class Application {
         return "pharmacyrequest";
     }
 
+    @PostMapping(value = "/fetchReport", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public FdaReport fetchReportByDate(@RequestBody String date) {
+        try {
+            List<FdaReportResult> report = jdbcTemplate.query(
+                    "SELECT p.drug_id, p.refills_auth, p.date, rx.generic_name, d.name, d.doctor_ssn, p.quantity, pa.patient_ssn, p.prescription_id\n" +
+                            "FROM Prescription p, Doctor d, Drug rx, Patient pa\n" +
+                            "WHERE p.doctor_ssn = d.doctor_ssn AND rx.drug_id = p.drug_id\n" +
+                            "AND\n" +
+                            "date >" + date + "- interval (dayofmonth(curdate()) - 1) day - interval 6 month;",
+                    new Object[]{},
+                    (rs, rowNum) -> new FdaReportResult(rs.getInt("drug_id"),
+                            rs.getInt("refills_auth"),
+                            rs.getDate("date"),
+                            rs.getString("generic_name"),
+                            rs.getString("name"),
+                            rs.getInt("doctor_ssn"),
+                            rs.getInt("quantity"),
+                            rs.getInt("patient_ssn"),
+                            rs.getInt("prescription_id")
+                    ));
+            return new FdaReport(report);
+        } catch (Error e) {
+            e.printStackTrace();
+        }
+        return new FdaReport();
+    }
+
     @RequestMapping(value = "/fetchReport", method = RequestMethod.GET)
     @ResponseBody
     public FdaReport fetchReport() {

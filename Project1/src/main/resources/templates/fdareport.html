@@ -25,7 +25,26 @@
         const fdaReport = await response.json();
         console.log(fdaReport);
         return fdaReport;
-    }
+    };
+
+    const fetchDataByDate = async (date) => {
+        const response = await fetch('http://localhost:8080/fetchReport', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(date)
+        });
+        const fdaReport = await response.json();
+        console.log(fdaReport);
+        return fdaReport;
+    };
+
+    const isValidDate = (date) => {
+        const areNumbers = !(isNaN(parseInt(date.split('/')[0]) || isNaN(parseInt(date.split('/')[1]))));
+        const validLength = date.split('/')[0].length === 2 || date.split('/')[1].length === 4;
+        return areNumbers && validLength;
+    };
 
     const renderData = (fdaReport) => {
         const {reportRows} = fdaReport;
@@ -57,40 +76,18 @@
             }
             table.appendChild(trRow);
         }
-    }
+    };
 
     const clearRows = (rows) => {
         for (let row of rows) {
             row.remove();
         }
-    }
-
-    const filterResponseData = (date, reportData) => {
-        const { reportRows } = reportData;
-
-        for (let row of reportRows) {
-            const {drugSummaries} = row;
-
-            for (let drugSummary of drugSummaries) {
-                const {prescriptions} = drugSummary;
-
-                for (let prescription of prescriptions) {
-                    const {date: prescribedDate} = prescription;
-
-                    if (Math.round(date.getTime() - new Date(prescribedDate).getTime().toFixed(0)) > 182) {
-                        drugSummary.quantityPrescribed -= prescription.quantity;
-                    }
-                }
-            }
-        }
-        return reportData;
-    }
+    };
 
     const filterByDate = async (date) => {
         const rows = document.querySelectorAll('#report-table .entry');
         clearRows(rows);
-        let reportData = await fetchData();
-        reportdata = filterResponseData(date, reportData);
+        let reportData = await fetchDataByDate(date);
         renderData(reportData);
     };
 
@@ -101,23 +98,23 @@
             const dateInput = document.querySelector('#date');
             const dateValue = dateInput.value;
             try {
-                if (isNaN(parseInt(dateValue.split('/')[0]) || isNaN(parseInt(dateValue.split('/')[1])))) {
+                if (!isValidDate(dateValue)) {
                     alert('enter a valid date in mm/yyyy format');
                     return;
                 }
-                const enteredDate = new Date(dateValue.split('/').join('/01/'));
+                const enteredDate = new Date(dateValue.split('/').join('/01/')).toISOString().slice(0, 19).replace('T', ' ');
                 filterByDate(enteredDate);
             } catch (error) {
                 alert('enter a valid date in mm/yyyy format');
             }
         });
-    }
+    };
 
     const main = async () => {
         let fdaReport = await fetchData();
         renderData(fdaReport);
         bindListeners()
-    }
+    };
     main()
 </script>
 </html>

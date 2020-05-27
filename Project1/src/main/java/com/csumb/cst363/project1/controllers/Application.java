@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.csumb.cst363.project1.PharmacyReport;
 import com.csumb.cst363.project1.Prescription;
 
 @Controller
@@ -108,12 +110,6 @@ public class Application
       return "fdarequest";
    }
    
-/*   @GetMapping("/prescriptionform")
-   public String prescriptionForm(Model model) {
-      model.addAttribute("prescription", new Prescription());
-      return "prescription";
-   }*/
-   
    @RequestMapping(value = "/prescriptionform", params = "cancel", method = RequestMethod.POST)
    public String prescriptionDisplayCancel(@Validated Prescription prescription, 
          BindingResult result, Model model) {
@@ -158,17 +154,6 @@ public class Application
       return "prescriptionlist";
    }
    
-/*   @GetMapping("/prescriptionlist")
-   public String prescriptionList(Model model) {
-      return "prescriptionlist";
-   }*/
-   
-/*   @GetMapping("/prescriptionrequest")
-   public String prescriptionRequest(Model model) {
-      model.addAttribute("prescription", new Prescription());
-      return "prescriptionrequest";
-   }*/
-   
    @PostMapping("/prescriptionrequest")
    public String processForm(@Validated Prescription prescription, 
          BindingResult result, Model model, @RequestParam("stuff") String stuff) {
@@ -190,13 +175,6 @@ public class Application
       return "prescriptionrequest";
    }
    
-/*   // Pharmacy request stuff
-   @GetMapping("/pharmacyrequest")
-   public String pharmacyRequest(Model model) {
-      
-      return "pharmacyreport";
-   }*/ 
-   
    @RequestMapping(value = "/pharmacyrequest", params = "ok", method = RequestMethod.POST)
    public String pharmacyRequestOK(@RequestParam("pharmacy") String pharmacy, 
          @RequestParam("date") Date date, Model model) {
@@ -210,63 +188,56 @@ public class Application
          pstmt.setString(1, pharmacy);
          ResultSet rs = pstmt.executeQuery();
          
+         int pharmacy_id = 0;
+         
          if(rs.next())
          {
-            model.addAttribute("pharmacy_id", rs.getInt(1));
+            pharmacy_id = rs.getInt(1);
+            model.addAttribute("pharmacy_id", pharmacy_id);
          }
          
          pstmt = conn.prepareStatement(
-            "select dr.trade_name, sum(pr.quantity) as quantity " +
+            "select trade_name, sum(pr.quantity) as quantity " +
             "from pharmacy_drug dp " +
             "join prescription pr on dp.pharmacy_id = pr.pharmacy_id " +
             "join drug dr on pr.drug_id = dr.drug_id " +
             "where date > ? " +
             "and pr.pharmacy_id = ? " +
             "group by dr.trade_name");
-         
-         pstmt.setDate(1, date.valueOf("1998-1-17"));
-         pstmt.setString(2, pharmacy);
-         
+               
+         pstmt.setDate(1, date);
+         pstmt.setInt(2, pharmacy_id);
          rs = pstmt.executeQuery();
          
+         ArrayList<PharmacyReport> report = new ArrayList<PharmacyReport>();
          
-         if (rs.next())
+         while (rs.next())
          {
-            System.out.println("Printing result...");
-            System.out.println(rs.getString("trade_name"));
-            System.out.println(rs.getInt("quantity"));    
+            report.add(new PharmacyReport(rs.getString("trade_name"), rs.getInt("quantity")));
          }
-         else
-         {
-            System.out.println("nada...");
-         }
+
+         model.addAttribute("report", report);
+         
+         conn.close();
          
       } catch (SQLException e) {
          e.printStackTrace();
       }
      
       model.addAttribute("date", date);
-      
       return "pharmacyreport";
    }
   
    @RequestMapping(value = "/pharmacyrequest", params = "cancel", method = RequestMethod.POST)
-   public String pharmacyRequestCancel(@RequestParam("pharmacy_id") String pharmacy_id, 
-         @RequestParam("date") Date date, Model model) {
-      return "pharmacyrequest";
+   public String pharmacyRequestCancel(Model model) {
+      return "project1";
    }
-   
-/*   // Pharmacy report stuff
-   @GetMapping("/pharmacyreport")
-   public String pharmacyReport(Model model) {
-      return "pharmacyreport";
-   }*/
    
    @RequestMapping(value = "/pharmacyreport", params = "ok", method = RequestMethod.POST)
    public String pharmacyReporttOK(Model model) {
       model.addAttribute("pharmacy_id", 0);
       model.addAttribute("date", "");
-      return "pharmacyrequest";
+      return "project1";
    }
 
 }

@@ -6,9 +6,9 @@
 <body>
   <h1>Pharmacy Information</h1>
   <form action="#" th:action="@{/pharmacyrequest}" method="post">
-  
   <div class="form-group">
    Pharmacy Name:    <select name="pharmacy" id="pharmacy" tabindex="3">
+   <option value="NONE" label="--- Select Pharmacy ---" />
    <option th:each="String : ${pharmacies}" th:value="${String}" th:text="${String}">
    </option>
    </select>

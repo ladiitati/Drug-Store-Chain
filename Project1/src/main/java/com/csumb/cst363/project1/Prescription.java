@@ -5,6 +5,18 @@ public class Prescription
    int doctorID;
    int patientID;
    String drugName = "w";
+   int drugID;
+   
+   public int getDrugID()
+   {
+      return drugID;
+   }
+
+   public void setDrugID(int drugID)
+   {
+      this.drugID = drugID;
+   }
+
    int quantity;
    int refills;
    //int prescriptionID;

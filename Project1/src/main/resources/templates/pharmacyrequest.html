@@ -6,7 +6,13 @@
 <body>
   <h1>Pharmacy Information</h1>
   <form action="#" th:action="@{/pharmacyrequest}" method="post">
-  Pharmacy ID: <input type="text" name="pharmacyID" /><br/>
+  
+  <div class="form-group">
+   Pharmacy Name:    <select name="pharmacy" id="pharmacy" tabindex="3">
+   <option th:each="String : ${pharmacies}" th:value="${String}" th:text="${String}">
+   </option>
+   </select>
+  </div> 
   Date: <input type="date" name="date" /><br/>
   <input type="submit" value="OK" name="ok"/>
   <input type="submit" value="Cancel" name="cancel"/>

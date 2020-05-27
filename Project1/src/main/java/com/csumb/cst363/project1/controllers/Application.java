@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -52,7 +53,25 @@ public class Application
    
    @RequestMapping(value = "/project1", params = "createPrescription", method = RequestMethod.POST)
    public String createPrescription(@Validated Prescription prescription, 
-         BindingResult result, Model model) {      
+         BindingResult result, Model model) {  
+      
+      try {
+         Connection conn = jdbcTemplate.getDataSource().getConnection();
+      
+         List<String> drugs = jdbcTemplate.query(
+            "select distinct trade_name from Drug",
+            new Object[] { } ,
+            (rs, rowNum) -> new String(rs.getString("trade_name")));
+         model.addAttribute("drugs", drugs);
+         
+         List<String> doctors = jdbcTemplate.query(
+               "select distinct name from Doctor",
+               new Object[] { } ,
+               (rs, rowNum) -> new String(rs.getString("name")));
+            model.addAttribute("doctors", doctors);
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
       return "prescription";
    }
    
@@ -65,6 +84,20 @@ public class Application
    @RequestMapping(value = "/project1", params = "pharmacyReport", method = RequestMethod.POST)
    public String pharmacyReport(@Validated Prescription prescription, 
          BindingResult result, Model model) {
+      
+      
+      try {
+         Connection conn = jdbcTemplate.getDataSource().getConnection();
+      
+         List<String> pharmacies = jdbcTemplate.query(
+            "select distinct name from Pharmacy",
+            new Object[] { } ,
+            (rs, rowNum) -> new String(rs.getString("name")));
+         model.addAttribute("pharmacies", pharmacies);
+
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
       
       return "pharmacyrequest";
    }
@@ -92,29 +125,32 @@ public class Application
    public String prescriptionDisplayOK(@Validated Prescription prescription, 
          BindingResult result, Model model) {
       
+      int prescription_ID = 0;
+      
       try {
          Connection conn = jdbcTemplate.getDataSource().getConnection();
          PreparedStatement pstmt = conn.prepareStatement(
-               "insert into prescription (doctorID, patientID, drugName, quantity, refills) "
-               + "values (?,?,?,?,?)");
+               "insert into prescription (doctor_ssn, patient_ssn, drug_ID, quantity, refills_auth, "
+               + "date, dosage, pharmacy_id) "
+               + "values (?,?,?,?,?,?,?,?)");
          pstmt.setString(1, Integer.toString(prescription.getDoctorID()));
          pstmt.setString(2, Integer.toString(prescription.getPatientID()));
-         pstmt.setString(3, prescription.getDrugName());
+         pstmt.setString(3, Integer.toString(prescription.getDrugID()));
          pstmt.setString(4, Integer.toString(prescription.getQuantity()));
          pstmt.setString(5, Integer.toString(prescription.getRefills()));
+         pstmt.setString(6, "2020-01-01"); //use todays date
+         pstmt.setString(7, "50");
+         pstmt.setString(8, "1");
          int rc = pstmt.executeUpdate();
          
-         List<Prescription> prescriptions = jdbcTemplate.query(
-               "select doctorID, patientID, drugName, quantity, refills "
-               + " from prescription",
-               new Object[] { } ,
-               (rs, rowNum) -> new Prescription(rs.getInt("doctorID"),
-               rs.getInt("patientID"),
-               rs.getString("drugName"),
-               rs.getInt("quantity"),
-               rs.getInt("refills")));
-              
-         model.addAttribute("prescriptions", prescriptions);
+         ResultSet index = pstmt.executeQuery("SELECT LAST_INSERT_ID()");
+
+         if(index.next())
+         {
+            prescription_ID = index.getInt(1);
+         }
+         
+         model.addAttribute("prescription_ID", Integer.toString(prescription_ID));
          
       } catch (SQLException e) {
          e.printStackTrace();
@@ -162,13 +198,60 @@ public class Application
    }*/ 
    
    @RequestMapping(value = "/pharmacyrequest", params = "ok", method = RequestMethod.POST)
-   public String pharmacyRequestOK(@RequestParam("pharmacyID") String pharmacyID, 
+   public String pharmacyRequestOK(@RequestParam("pharmacy") String pharmacy, 
          @RequestParam("date") Date date, Model model) {
+      
+      
+      try {
+         Connection conn = jdbcTemplate.getDataSource().getConnection();
+      
+         PreparedStatement pstmt = conn.prepareStatement(
+               "select pharmacy_id from Pharmacy where name = ?");
+         pstmt.setString(1, pharmacy);
+         ResultSet rs = pstmt.executeQuery();
+         
+         if(rs.next())
+         {
+            model.addAttribute("pharmacy_id", rs.getInt(1));
+         }
+         
+         pstmt = conn.prepareStatement(
+            "select dr.trade_name, sum(pr.quantity) as quantity " +
+            "from pharmacy_drug dp " +
+            "join prescription pr on dp.pharmacy_id = pr.pharmacy_id " +
+            "join drug dr on pr.drug_id = dr.drug_id " +
+            "where date > ? " +
+            "and pr.pharmacy_id = ? " +
+            "group by dr.trade_name");
+         
+         pstmt.setDate(1, date.valueOf("1998-1-17"));
+         pstmt.setString(2, pharmacy);
+         
+         rs = pstmt.executeQuery();
+         
+         
+         if (rs.next())
+         {
+            System.out.println("Printing result...");
+            System.out.println(rs.getString("trade_name"));
+            System.out.println(rs.getInt("quantity"));    
+         }
+         else
+         {
+            System.out.println("nada...");
+         }
+         
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
+     
+      model.addAttribute("date", date);
+      
       return "pharmacyreport";
    }
   
    @RequestMapping(value = "/pharmacyrequest", params = "cancel", method = RequestMethod.POST)
-   public String pharmacyRequestCancel(@RequestParam("pharmacyID") String pharmacyID, 
+   public String pharmacyRequestCancel(@RequestParam("pharmacy_id") String pharmacy_id, 
          @RequestParam("date") Date date, Model model) {
       return "pharmacyrequest";
    }
@@ -181,7 +264,7 @@ public class Application
    
    @RequestMapping(value = "/pharmacyreport", params = "ok", method = RequestMethod.POST)
    public String pharmacyReporttOK(Model model) {
-      model.addAttribute("pharmacyID", 0);
+      model.addAttribute("pharmacy_id", 0);
       model.addAttribute("date", "");
       return "pharmacyrequest";
    }

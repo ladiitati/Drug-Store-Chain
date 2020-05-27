@@ -5,12 +5,25 @@
 </head>
 <body>
   <h1>Enter a prescription </h1>
-  <form action="#" th:action="@{/prescriptionform}" th:object="${prescription}" method="post">
-  Doctor: <input type="text" th:field="*{doctorID}" /><br/>
+
+<form action="#" th:action="@{/prescriptionform}" th:object="${prescription}" method="post">
+<div class="form-group">
+   Doctor:    <select name="doctor" id="" tabindex="3">
+   <option th:each="String : ${doctors}" th:value="${String}" th:text="${String}">
+   </option>
+   </select>
+</div> 
+  
   Patient: <input type="text" th:field="*{patientID}" /><br/>
-  Drug: <input type="text" th:field="*{drugName}" /><br/>
+  Drug: <input type="text" th:field="*{drugID}" /><br/>
   Quantity: <input type="text" th:field="*{quantity}" /><br/>
   Refills: <input type="text" th:field="*{refills}" /><br/>
+  <div class="form-group">
+Drug:    <select name="drug" id="drug" tabindex="3">
+        <option th:each="String : ${drugs}" th:value="${String}" th:text="${String}">
+        </option>
+    </select>
+</div>
   <input type="submit" value="OK" name="ok"/>
   <input type="submit" value="Cancel" name="cancel"/>
   </form>

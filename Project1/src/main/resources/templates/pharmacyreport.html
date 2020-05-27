@@ -6,6 +6,8 @@
 <body>
   <h1>Pharmacy Report</h1>
   <form action="#" th:action="@{/pharmacyreport}" method="post">
+  <p th:inline="text">Pharmacy ID: [[${pharmacy_id}]].</p>
+  <p th:inline="text">Date: [[${date}]]</p>
   <input type="submit" value="OK" name="ok"/>
   </form>
 </body></html>

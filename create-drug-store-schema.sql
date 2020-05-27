@@ -40,7 +40,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `drugstore`.`Pharmaceutical_Company`;
 CREATE TABLE IF NOT EXISTS `drugstore`.`Pharmaceutical_Company` 
 (
-  `pharmaceutical_company_id` INT NOT NULL,
+  `pharmaceutical_company_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `phone_number` INT NOT NULL,
   PRIMARY KEY (`pharmaceutical_company_id`)
@@ -50,7 +50,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `drugstore`.`Drug`;
 CREATE TABLE IF NOT EXISTS `drugstore`.`Drug` 
 (
-  `drug_id` INT NOT NULL,
+  `drug_id` INT NOT NULL AUTO_INCREMENT,
   `trade_name` VARCHAR(45) NOT NULL,
   `generic_name` VARCHAR(45) NOT NULL,
   `pharmaceutical_company_id` INT NOT NULL,
@@ -68,7 +68,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `drugstore`.`Pharmacy`;
 CREATE TABLE IF NOT EXISTS `drugstore`.`Pharmacy` 
 (
-  `pharmacy_id` INT NOT NULL,
+  `pharmacy_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `address` VARCHAR(45) NOT NULL,
   `phone_number` VARCHAR(45) NOT NULL,
@@ -78,7 +78,7 @@ ENGINE = InnoDB;
 
 DROP TABLE IF EXISTS `drugstore`.`Pharmacy_Drug`;
 CREATE TABLE IF NOT EXISTS `drugstore`.`Pharmacy_Drug` (
-  `pharmacy_drug_id` INT NOT NULL,
+  `pharmacy_drug_id` INT NOT NULL AUTO_INCREMENT,
   `drug_id` INT NOT NULL,
   `price` INT NOT NULL,
   `pharmacy_id` INT NOT NULL,
@@ -101,7 +101,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `drugstore`.`Perscription`;
 CREATE TABLE IF NOT EXISTS `drugstore`.`Perscription` 
 (
-  `perscription_id` INT NOT NULL,
+  `perscription_id` INT NOT NULL AUTO_INCREMENT,
   `patient_ssn` INT NOT NULL,
   `drug_id` INT NOT NULL,
   `doctor_ssn` INT NOT NULL,
@@ -142,7 +142,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `drugstore`.`Contract_Supervisor`;
 CREATE TABLE IF NOT EXISTS `drugstore`.`Contract_Supervisor` 
 (
-  `supervisor_id` INT NOT NULL,
+  `supervisor_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `pharmacy_id` INT NOT NULL,
   PRIMARY KEY (`supervisor_id`),

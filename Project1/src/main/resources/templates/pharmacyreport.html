@@ -4,8 +4,22 @@
   <title>Pharmacy Drug Report</title>
 </head>
 <body>
-  <h1>Pharmacy Report</h1>
-  <form action="#" th:action="@{/pharmacyreport}" method="post">
+<h1>Pharmacy Report</h1>
+<form action="#" th:action="@{/pharmacyreport}" method="post">
+  <p th:inline="text">Pharmacy ID: [[${pharmacy_id}]].</p>
+  <p th:inline="text">Date: [[${date}]]</p>
+  <table border="1">
+    <tr>
+      <th>Drug</th>
+      <th>Quantity</th>
+    </tr>
+    <div th:each="rpt : ${report}">
+      <tr>
+        <td th:inline="text">[[${rpt.name}]]</td>
+        <td th:inline="text">[[${rpt.quantity}]]</td>
+      </tr>
+    </div>
+  </table>
   <input type="submit" value="OK" name="ok"/>
-  </form>
+</form>
 </body></html>

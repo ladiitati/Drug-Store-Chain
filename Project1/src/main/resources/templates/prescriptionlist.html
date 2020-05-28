@@ -1,25 +1,8 @@
 <!doctype html>
 <html xmlns:th="www.thymeLeaf.org">
 <head>
-   <title>Prescription List</title>
+   <title>Prescription Form</title>
 </head>
 <body>
-   <table border=1> 
-      <tr>
-         <th>Doc</th>
-         <th>Pat</th>
-         <th>Drug</th>
-         <th>Refills</th>
-         <th>Quantity</th>
-      </tr>
-      <div th:each="prescription : ${prescriptions}">
-         <tr>
-            <td th:inline="text">[[${prescription.doctorID}]]</td>
-            <td th:inline="text">[[${prescription.patientID}]]</td>
-            <td th:inline="text">[[${prescription.drugName}]]</td>
-            <td th:inline="text">[[${prescription.refills}]]</td>
-            <td th:inline="text">[[${prescription.quantity}]]</td>
-         </tr>
-      </div>
-   </table> 
+<h1 th:inline="text">Your prescription ID is: [[${prescription_ID}]]</h1>
 </body></html>

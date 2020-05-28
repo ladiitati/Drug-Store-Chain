@@ -4,14 +4,36 @@
   <title>Prescription Form</title>
 </head>
 <body>
-  <h1>Enter a prescription </h1>
-  <form action="#" th:action="@{/prescriptionform}" th:object="${prescription}" method="post">
-  Doctor: <input type="text" th:field="*{doctorID}" /><br/>
+<h1>Enter a prescription </h1>
+
+<form action="#" th:action="@{/prescriptionform}" th:object="${prescription}" method="post">
+  <div class="form-group">
+    Doctor:    <select name="doctor" id="doctor" tabindex="3">
+    <option value="NONE" label="--- Select Doctor ---" />
+    <option th:each="String : ${doctors}" th:value="${String}" th:text="${String}">
+    </option>
+  </select>
+  </div>
   Patient: <input type="text" th:field="*{patientID}" /><br/>
-  Drug: <input type="text" th:field="*{drugName}" /><br/>
   Quantity: <input type="text" th:field="*{quantity}" /><br/>
   Refills: <input type="text" th:field="*{refills}" /><br/>
+  <div class="form-group">
+    Drug:    <select name="drug" id="drug" tabindex="3">
+    <option value="NONE" label="--- Select Drug ---" />
+    <option th:each="String : ${drugs}" th:value="${String}" th:text="${String}">
+    </option>
+  </select>
+  </div>
+  Dosage: <input type="text" th:field="*{dosage}" /><br/>
+  <div class="form-group">
+    Pharmacy Name:    <select name="pharmacy" id="pharmacy" tabindex="3">
+    <option value="NONE" label="--- Select Pharmacy ---" />
+    <option th:each="String : ${pharmacies}" th:value="${String}" th:text="${String}">
+    </option>
+  </select>
+  </div>
+  date: <input type="text" th:field="*{date}" /><br/>
   <input type="submit" value="OK" name="ok"/>
   <input type="submit" value="Cancel" name="cancel"/>
-  </form>
+</form>
 </body></html>

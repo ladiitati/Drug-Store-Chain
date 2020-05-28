@@ -227,9 +227,9 @@ public class Application
                "from patient  " +
                "where patient_ssn = ?) ");
          
-         pstmt.setInt(1, 0);
-         pstmt.setInt(2, 51);
-         pstmt.setInt(3, 0);
+         pstmt.setString(1, patientID);
+         pstmt.setString(2, prescriptionID);
+         pstmt.setString(3, patientID);
          ResultSet rs = pstmt.executeQuery();
       
          if (rs.next())
@@ -238,6 +238,10 @@ public class Application
             model.addAttribute("price", price);
             model.addAttribute("prescriptionID", prescriptionID);
             model.addAttribute("patientID", patientID);
+            
+            System.out.println("Patient: " + patientID +
+               ", PrescriptionID: " + prescriptionID + 
+               ", Price: " + price);
          }
       
       } catch (SQLException e) {

@@ -221,7 +221,7 @@ public class Application
                "(select drug_id " +
                "from prescription " +
                "where patient_ssn = ? " +
-               "and perscription_id = ?) " +
+               "and prescription_id = ?) " +
                "and pharmacy_id =  " +
                "(select pharmacy_id " +
                "from patient  " +

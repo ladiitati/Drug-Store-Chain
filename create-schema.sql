@@ -232,13 +232,13 @@ INSERT INTO `Contract` (`contract_id`, `pharmaceutical_company_id`, `pharmacy_id
 
 
 #
-# TABLE STRUCTURE FOR: Perscription
+# TABLE STRUCTURE FOR: Prescription
 #
 
-DROP TABLE IF EXISTS `Perscription`;
+DROP TABLE IF EXISTS `Prescription`;
 
-CREATE TABLE `Perscription` (
-  `perscription_id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `Prescription` (
+  `prescription_id` int(11) NOT NULL AUTO_INCREMENT,
   `patient_ssn` int(11) NOT NULL,
   `drug_id` int(11) NOT NULL,
   `doctor_ssn` int(11) NOT NULL,
@@ -248,42 +248,42 @@ CREATE TABLE `Perscription` (
   `refills_filled` int(11) DEFAULT NULL,
   `dosage` int(11) NOT NULL,
   `pharmacy_id` int(11) NOT NULL,
-  PRIMARY KEY (`perscription_id`),
-  KEY `perscription_fk_patient_idx` (`patient_ssn`),
-  KEY `perscription_fk_doctor_idx` (`doctor_ssn`),
-  KEY `perscription_fk_drug_idx` (`drug_id`),
-  KEY `fk_Perscription_Pharmacy1_idx` (`pharmacy_id`),
-  CONSTRAINT `fk_Perscription_Pharmacy1` FOREIGN KEY (`pharmacy_id`) REFERENCES `Pharmacy` (`pharmacy_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `perscription_fk_doctor` FOREIGN KEY (`doctor_ssn`) REFERENCES `Doctor` (`doctor_ssn`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `perscription_fk_drug` FOREIGN KEY (`drug_id`) REFERENCES `Drug` (`drug_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `perscription_fk_patient` FOREIGN KEY (`patient_ssn`) REFERENCES `Patient` (`patient_ssn`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  PRIMARY KEY (`prescription_id`),
+  KEY `prescription_fk_patient_idx` (`patient_ssn`),
+  KEY `prescription_fk_doctor_idx` (`doctor_ssn`),
+  KEY `prescription_fk_drug_idx` (`drug_id`),
+  KEY `fk_prescription_Pharmacy1_idx` (`pharmacy_id`),
+  CONSTRAINT `fk_prescription_Pharmacy1` FOREIGN KEY (`pharmacy_id`) REFERENCES `Pharmacy` (`pharmacy_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `prescription_fk_doctor` FOREIGN KEY (`doctor_ssn`) REFERENCES `Doctor` (`doctor_ssn`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `prescription_fk_drug` FOREIGN KEY (`drug_id`) REFERENCES `Drug` (`drug_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `prescription_fk_patient` FOREIGN KEY (`patient_ssn`) REFERENCES `Patient` (`patient_ssn`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (1, 0, 1, 923, '2002-02-26 12:08:32', 576, 5, 5, 340, 1);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (2, 2, 2, 2849, '1996-12-17 16:18:29', 41, 6, 0, 0, 2);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (3, 5, 3, 46167, '1995-02-15 06:40:19', 7, 7, 3, 5, 3);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (4, 6370, 4, 8076868, '1996-05-28 20:08:17', 451713, 3, 5, 63167, 4);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (5, 6582, 5, 629539399, '1980-10-24 23:45:36', 25, 3, 4, 435, 5);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (6, 12903, 6, 923, '1972-04-21 23:55:41', 57875271, 5, 2, 27250, 1);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (7, 283018, 7, 2849, '1983-02-18 13:06:20', 1, 6, 9, 61037495, 2);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (8, 330667, 8, 46167, '2003-03-22 04:14:53', 288076, 7, 8, 9, 3);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (9, 3000143, 9, 8076868, '2000-04-21 19:03:15', 96744260, 9, 3, 0, 4);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (10, 79599271, 10, 629539399, '1979-05-29 18:38:04', 44, 8, 2, 0, 5);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (11, 0, 11, 923, '1995-08-21 03:19:37', 1, 7, 1, 919, 1);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (12, 2, 12, 2849, '1997-10-23 18:24:11', 2, 4, 4, 7412023, 2);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (13, 5, 13, 46167, '1991-11-04 20:07:46', 323334, 4, 4, 4829, 3);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (14, 6370, 14, 8076868, '2002-12-06 00:08:38', 2894, 9, 3, 75827717, 4);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (15, 6582, 15, 629539399, '1978-08-06 05:50:49', 2341311, 5, 1, 68271652, 5);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (16, 12903, 16, 923, '2005-01-06 06:32:41', 14, 0, 1, 67397, 1);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (17, 283018, 17, 2849, '1971-08-15 15:12:13', 4, 7, 1, 0, 2);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (18, 330667, 18, 46167, '2002-12-05 13:46:05', 1, 5, 0, 23747, 3);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (19, 3000143, 19, 8076868, '2001-06-07 05:51:37', 59, 3, 1, 26, 4);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (20, 79599271, 20, 629539399, '2009-07-13 08:21:58', 0, 8, 7, 62436, 5);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (21, 0, 21, 923, '2009-11-05 06:47:17', 5, 5, 2, 1544118, 1);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (22, 2, 22, 2849, '2011-02-14 22:08:18', 118940, 4, 2, 6, 2);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (23, 5, 23, 46167, '2004-04-08 14:08:40', 720639, 9, 6, 1591, 3);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (24, 6370, 24, 8076868, '1970-07-24 09:34:10', 128, 2, 2, 57821707, 4);
-INSERT INTO `Perscription` (`perscription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (25, 6582, 25, 629539399, '1993-11-21 13:05:04', 1190652, 1, 6, 7160, 5);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (1, 0, 1, 923, '2002-02-26 12:08:32', 576, 5, 5, 340, 1);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (2, 2, 2, 2849, '1996-12-17 16:18:29', 41, 6, 0, 0, 2);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (3, 5, 3, 46167, '1995-02-15 06:40:19', 7, 7, 3, 5, 3);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (4, 6370, 4, 8076868, '1996-05-28 20:08:17', 451713, 3, 5, 63167, 4);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (5, 6582, 5, 629539399, '1980-10-24 23:45:36', 25, 3, 4, 435, 5);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (6, 12903, 6, 923, '1972-04-21 23:55:41', 57875271, 5, 2, 27250, 1);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (7, 283018, 7, 2849, '1983-02-18 13:06:20', 1, 6, 9, 61037495, 2);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (8, 330667, 8, 46167, '2003-03-22 04:14:53', 288076, 7, 8, 9, 3);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (9, 3000143, 9, 8076868, '2000-04-21 19:03:15', 96744260, 9, 3, 0, 4);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (10, 79599271, 10, 629539399, '1979-05-29 18:38:04', 44, 8, 2, 0, 5);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (11, 0, 11, 923, '1995-08-21 03:19:37', 1, 7, 1, 919, 1);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (12, 2, 12, 2849, '1997-10-23 18:24:11', 2, 4, 4, 7412023, 2);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (13, 5, 13, 46167, '1991-11-04 20:07:46', 323334, 4, 4, 4829, 3);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (14, 6370, 14, 8076868, '2002-12-06 00:08:38', 2894, 9, 3, 75827717, 4);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (15, 6582, 15, 629539399, '1978-08-06 05:50:49', 2341311, 5, 1, 68271652, 5);
+INSERT INTO `prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (16, 12903, 16, 923, '2005-01-06 06:32:41', 14, 0, 1, 67397, 1);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (17, 283018, 17, 2849, '1971-08-15 15:12:13', 4, 7, 1, 0, 2);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (18, 330667, 18, 46167, '2002-12-05 13:46:05', 1, 5, 0, 23747, 3);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (19, 3000143, 19, 8076868, '2001-06-07 05:51:37', 59, 3, 1, 26, 4);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (20, 79599271, 20, 629539399, '2009-07-13 08:21:58', 0, 8, 7, 62436, 5);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (21, 0, 21, 923, '2009-11-05 06:47:17', 5, 5, 2, 1544118, 1);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (22, 2, 22, 2849, '2011-02-14 22:08:18', 118940, 4, 2, 6, 2);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (23, 5, 23, 46167, '2004-04-08 14:08:40', 720639, 9, 6, 1591, 3);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (24, 6370, 24, 8076868, '1970-07-24 09:34:10', 128, 2, 2, 57821707, 4);
+INSERT INTO `Prescription` (`prescription_id`, `patient_ssn`, `drug_id`, `doctor_ssn`, `date`, `quantity`, `refills_auth`, `refills_filled`, `dosage`, `pharmacy_id`) VALUES (25, 6582, 25, 629539399, '1993-11-21 13:05:04', 1190652, 1, 6, 7160, 5);
 
 
 

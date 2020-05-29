@@ -4,6 +4,7 @@
    <title>Prescription Response</title>
 </head>
 <body>
+<<<<<<< Updated upstream
    <h1>Prescription Fill</h1>
    <p>Prescriptions</p>
 
@@ -23,3 +24,31 @@
    <input type="submit" value="OK" name="ok"/>
    <input type="submit" value="Cancel" name="cancel"/>
 </body></html>
+=======
+<h1>Prescription Fill</h1>
+<p>Would you like to fill this prescription?</p>
+<table border="1">
+   <tr>
+      <th>Patient</th>
+      <th>Prescription ID</th>
+      <th>Price</th>
+   </tr>
+   <tr>
+      <td th:inline="text">[[${patientID}]]</td>
+      <td id="prescription-id" th:inline="text">[[${prescriptionID}]]</td>
+      <td th:inline="text">[[${price}]]</td>
+   </tr>
+</table>
+<form action="#" th:action="@{/prescriptionfill}" th:object="${prescription}" method="post">
+   <input class="prescription-input" type="hidden" value="prescriptionID" th:field="*{prescriptionID}" /><br/>
+   <input type="submit" value="OK" name="ok"/>
+   <input type="submit" value="Cancel" name="cancel"/>
+</form>
+</body>
+<script>
+   const prescriptionID = document.querySelector('#prescription-id').textContent;
+   const prescriptionInput = document.querySelector('.prescription-input');
+   prescriptionInput.value = prescriptionID;
+</script>
+</html>
+>>>>>>> Stashed changes

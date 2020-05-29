@@ -1,0 +1,26 @@
+<!doctype html>
+<html xmlns:th="www.thymeLeaf.org">
+<head>
+   <title>Prescription Response</title>
+</head>
+<body>
+   <h1>Prescription Fill</h1>
+   <p>Choose a prescription to refill.</p>
+   <table border="1">
+      <tr>
+         <th>Prescription ID</th>
+      </tr>
+  <div th:each="String :${prescriptions}">
+      <tr>
+         <td th:inline="text">[[${String}]]</td>
+      </tr>
+      </div>
+   </table>
+   <p>Type in the prescription ID you wish to refill.</p>
+<form action="#" th:action="@{/prescriptionfill}" th:object="${prescription}" method="post">
+   <input type="text" value="prescriptionID" th:field="*{prescriptionID}" /><br/>
+   <input type="submit" value="OK" name="ok"/>
+   <input type="submit" value="Cancel" name="cancel"/>
+</form>
+</body>
+</html>

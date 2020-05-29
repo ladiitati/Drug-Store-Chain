@@ -1,0 +1,13 @@
+<!doctype html>
+<html xmlns:th="www.thymeleaf.org">
+<head>
+  <title>List/Refill Prescriptions</title>
+</head>
+<body>
+  <h1>List/Refill Prescriptions</h1>
+<p>Enter your user ID.</p>
+  <form action="#" th:action="@{/prescriptionrefill}" th:object="${prescription}" method="post">
+  Patient SSN: <input type="text" th:field="*{patientID}" /><br/>
+  <input type="submit" value="Submit" />
+  </form>
+</body></html>

@@ -5,8 +5,7 @@
 </head>
 <body>
 <h1>Prescription Fill</h1>
-<p>Prescriptions</p>
-
+<p>Would you like to fill this prescription?</p>
 <table border="1">
    <tr>
       <th>Patient</th>
@@ -15,10 +14,19 @@
    </tr>
    <tr>
       <td th:inline="text">[[${patientID}]]</td>
-      <td th:inline="text">[[${prescriptionID}]]</td>
+      <td id="prescription-id" th:inline="text">[[${prescriptionID}]]</td>
       <td th:inline="text">[[${price}]]</td>
    </tr>
 </table>
-<input type="submit" value="OK" name="ok"/>
-<input type="submit" value="Cancel" name="cancel"/>
-</body></html>
+<form action="#" th:action="@{/prescriptionfill}" th:object="${prescription}" method="post">
+   <input class="prescription-input" type="hidden" value="prescriptionID" th:field="*{prescriptionID}" /><br/>
+   <input type="submit" value="OK" name="ok"/>
+   <input type="submit" value="Cancel" name="cancel"/>
+</form>
+</body>
+<script>
+   const prescriptionID = document.querySelector('#prescription-id').textContent;
+   const prescriptionInput = document.querySelector('.prescription-input');
+   prescriptionInput.value = prescriptionID;
+</script>
+</html>

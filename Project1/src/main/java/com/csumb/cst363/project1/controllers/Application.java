@@ -81,12 +81,17 @@ public class Application
         return "prescription";
     }
 
-    @RequestMapping(value = "/project1", params = "fillPrescription", method = RequestMethod.POST)
-    public String fillPrescription(@Validated Prescription prescription,
-                                   BindingResult result, Model model) {
-        return "prescriptionrequest";
-    }
-
+   @RequestMapping(value = "/project1", params = "fillPrescription", method = RequestMethod.POST)
+   public String fillPrescription(@Validated Prescription prescription, 
+         BindingResult result, Model model) {     
+      return "prescriptionrequest";
+   }
+   
+   @RequestMapping(value = "/project1", params = "refillPrescription", method = RequestMethod.POST)
+   public String refillPrescription(@Validated Prescription prescription, 
+         BindingResult result, Model model) {     
+      return "prescriptionrefill";
+   }
     @RequestMapping(value = "/project1", params = "pharmacyReport", method = RequestMethod.POST)
     public String pharmacyReport(@Validated Prescription prescription,
                                  BindingResult result, Model model) {
@@ -196,65 +201,144 @@ public class Application
         return "prescriptionlist";
     }
 
-    @PostMapping("/prescriptionrequest")
-    public String processForm(@RequestParam("patientID") String patientID,
-                              @RequestParam("prescriptionID") String prescriptionID,
-                              Model model) {
-
-        int price = 0;
-
-        try {
-            Connection conn = jdbcTemplate.getDataSource().getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(
-                    "select pd.price " +
-                            "from Pharmacy_drug pd " +
-                            "where drug_id = " +
-                            "(select drug_id " +
-                            "from prescription " +
-                            "where patient_ssn = ? " +
-                            "and prescription_id = ?) " +
-                            "and pharmacy_id =  " +
-                            "(select pharmacy_id " +
-                            "from patient  " +
-                            "where patient_ssn = ?) ");
-
-            pstmt.setString(1, patientID);
-            pstmt.setString(2, prescriptionID);
-            pstmt.setString(3, patientID);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next())
-            {
-                price = rs.getInt(1);
-                model.addAttribute("price", price);
-                model.addAttribute("prescriptionID", prescriptionID);
-                model.addAttribute("patientID", patientID);
-
-                System.out.println("Patient: " + patientID +
-                        ", PrescriptionID: " + prescriptionID +
-                        ", Price: " + price);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        model.addAttribute("prescription", prescription);
-        return "prescriptionfill";
-    }
-
-    @RequestMapping(value = "/prescriptionfill", params = "ok", method = RequestMethod.POST)
-    public String prescriptionRequestOK(@RequestParam("patientID") String patientID,
-                                        @RequestParam("prescriptionID") String prescriptionID, Model model) {
-
-
-        return "prescriptionrequest";
-    }
-
-    @RequestMapping(value = "/prescriptionfill", params = "cancel", method = RequestMethod.POST)
-    public String prescriptionRequestCancel(Model model) {
-        return "project1";
-    }
+   @PostMapping("/prescriptionrequest")
+   public String processForm(@RequestParam("patientID") String patientID, 
+         @RequestParam("prescriptionID") String prescriptionID, 
+         Model model) {
+      
+      int price = 0;
+      
+      try {
+         Connection conn = jdbcTemplate.getDataSource().getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(
+               "select pd.price " +
+               "from Pharmacy_drug pd " +
+               "where drug_id = " +
+               "(select drug_id " +
+               "from perscription " +
+               "where patient_ssn = ? " +
+               "and perscription_id = ?) " +
+               "and pharmacy_id =  " +
+               "(select pharmacy_id " +
+               "from patient  " +
+               "where patient_ssn = ?) ");
+         
+         pstmt.setString(1, patientID);
+         pstmt.setString(2, prescriptionID);
+         pstmt.setString(3, patientID);
+         ResultSet rs = pstmt.executeQuery();
+      
+         if (rs.next())
+         {
+            price = rs.getInt(1);
+            model.addAttribute("price", price);
+            model.addAttribute("prescriptionID", prescriptionID);
+            model.addAttribute("patientID", patientID);
+          
+         }
+      
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
+      
+      model.addAttribute("prescription", prescription);
+      return "prescriptionfill";
+   }
+   
+   @RequestMapping(value = "/prescriptionfill", params = "ok", method = RequestMethod.POST)
+   public String prescriptionRequestOK(@RequestParam("prescriptionID") String prescriptionID, Model model) {
+      try {
+         Connection conn = jdbcTemplate.getDataSource().getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(
+               "select * from Perscription where perscription_ID = ? and refills_auth > refills_filled");
+      pstmt.setString(1,  prescriptionID);
+     ResultSet rs = pstmt.executeQuery();
+      if (rs.next()) {
+      PreparedStatement ustmt = conn.prepareStatement("update perscription set refills_filled = refills_filled+1 where perscription_id = ?");
+      ustmt.setString(1, prescriptionID);
+      int refillUpdate = ustmt.executeUpdate();
+      if(refillUpdate!=1) {   System.out.println("error updating!!");}};
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
+      return "prescriptionfillsuccess";
+   }
+   
+   @RequestMapping(value = "/prescriptionfill", params = "cancel", method = RequestMethod.POST)
+   public String prescriptionRequestCancel(Model model) {     
+      return "project1";
+   }
+   
+   @PostMapping("/prescriptionrefill")
+   public String processRefill(@RequestParam("patientID") String patientID, 
+         Model model) {
+      
+      int price = 0;
+      
+      try {
+         Connection conn = jdbcTemplate.getDataSource().getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(
+               "select pd.price " +
+               "from Pharmacy_drug pd " +
+               "where drug_id = " +
+               "(select drug_id " +
+               "from perscription " +
+               "where patient_ssn = ? " +
+               "and perscription_id = ?) " +
+               "and pharmacy_id =  " +
+               "(select pharmacy_id " +
+               "from patient  " +
+               "where patient_ssn = ?) ");
+         
+         pstmt.setString(1, patientID);
+         pstmt.setString(2, patientID);
+         pstmt.setString(3, patientID);
+         ResultSet rs = pstmt.executeQuery();
+      
+         if (rs.next())
+         {
+            price = rs.getInt(1);
+            model.addAttribute("price", price);
+            model.addAttribute("patientID", patientID);
+          
+         }
+         ArrayList<String> prescriptions = new ArrayList<String>();
+         pstmt = conn.prepareStatement(
+            "select perscription_id from perscription " +
+            "where patient_ssn = ? " +
+            "and refills_auth > refills_filled");
+         pstmt.setString(1, patientID);
+         rs = pstmt.executeQuery();      while (rs.next())
+         {
+           prescriptions.add((rs.getString("perscription_id")));
+         }
+         model.addAttribute("prescriptions", prescriptions);
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
+      
+      model.addAttribute("prescription", prescription);
+      return "prescriptionrefilllist";
+   }
+   
+   @RequestMapping(value = "/prescriptionrefilllist", params = "ok", method = RequestMethod.POST)
+   public String prescriptionRefillOK(@RequestParam("prescriptionID") String prescriptionID, Model model) {
+      try {
+         Connection conn = jdbcTemplate.getDataSource().getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(
+               "select * from Perscription where perscription_ID = ? and refills_auth > refills_filled");
+      pstmt.setString(1,  prescriptionID);
+     ResultSet rs = pstmt.executeQuery();
+      if (rs.next()) {
+      PreparedStatement ustmt = conn.prepareStatement("update perscription set refills_filled = refills_filled+1 where perscription_id = ?");
+      ustmt.setString(1, prescriptionID);
+      int refillUpdate = ustmt.executeUpdate();
+      if(refillUpdate!=1) {   System.out.println("error updating!!");}};
+      } catch (SQLException e) {
+         e.printStackTrace();
+      }
+      return "prescriptionfillsuccess";
+   }
 
     @RequestMapping(value = "/pharmacyrequest", params = "ok", method = RequestMethod.POST)
     public String pharmacyRequestOK(@RequestParam("pharmacy") String pharmacy,

@@ -1,10 +1,10 @@
 
 -- create the database
-DROP SCHEMA IF EXISTS `drugstore1`;
-CREATE SCHEMA IF NOT EXISTS `drugstore1` DEFAULT CHARACTER SET utf8 ;
+DROP SCHEMA IF EXISTS `drugstore`;
+CREATE SCHEMA IF NOT EXISTS `drugstore` DEFAULT CHARACTER SET utf8 ;
 
 -- select the database
-USE `drugstore1`;
+USE `drugstore`;
 
 #
 # TABLE STRUCTURE FOR: Doctor
